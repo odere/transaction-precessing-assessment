@@ -1,0 +1,30 @@
+{
+  "name": "transaction-precessing-assessment",
+  "version": "1.0.0",
+  "description": "Develop solution related to transaction processing (KISS, DRY, TDD, Friendly =))",
+  "main": "src/index.js",
+  "scripts": {
+    "measurePerf": "node ./src/measurePerformance.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/odere/transaction-precessing-assessment.git"
+  },
+  "keywords": [
+    "JavaScript",
+    "Jest",
+    "KISS",
+    "DRY",
+    "TDD"
+  ],
+  "author": "aleksandr.dererechei@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/odere/transaction-precessing-assessment/issues"
+  },
+  "homepage": "https://github.com/odere/transaction-precessing-assessment#readme",
+  "devDependencies": {
+    "jest": "^26.6.3"
+  }
+}
