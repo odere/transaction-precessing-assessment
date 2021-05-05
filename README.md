@@ -53,7 +53,7 @@ Calculate the balance in a specific category within the specified time period.
 getBalanceByCategoryInPeriod(transactionsList, category, startTime, endTime)
 ```
 
-### Input
+### Input 1 Challenge
 
 You can assume that all parameters will always be present and valid.
 
@@ -62,10 +62,138 @@ You can assume that all parameters will always be present and valid.
 - start time (inclusive) (Date)
 - end time (exclusive) (Date)
 
-### Output
+### Output 1 Challenge
 
 - Total balance (Number)
 
 Negative number means money spent.
 
 ## 2 Challenge
+
+Find all transactions that have the same source, target, category, amount, and with a time differenceof less than 1 minute.
+
+Sometimes when a customer is charged, there is a duplicate transaction created. We need to find those transactions so that they can be dealt with. Everything about the transaction should be identical, except the transaction id and the time at which it occurred, as there can be up to a minute delay.
+
+```JavaScript
+findDuplicateTransactions(transactions)
+```
+
+Find all transactions that have the same sourceAccount, targetAccount, category, amount, and the time difference between each consecutive transaction is less than 1 minute.
+
+### Input 2 Challenge
+
+You can assume that all parameters will always be present and valid. However, the incoming transactions are not guaranteed to be in any particular order.
+
+- list of transactions (Transaction[])
+
+### Output 2 Challenge
+
+- list of all the duplicate transaction groups, ordered by time ascending (Transaction[][]) The groups should be sorted in ascending order of the first transaction in the group.
+
+### Example 2 Challenge
+
+Input transactions:
+
+```json
+[
+  {
+    id: 3,
+    sourceAccount: 'A',
+    targetAccount: 'B',
+    amount: 100,
+    category: 'eating_out',
+    time: '2018-03-02T10:34:30.000Z'
+  },
+  {
+    id: 1,
+    sourceAccount: 'A',
+    targetAccount: 'B',
+    amount: 100,
+    category: 'eating_out',
+    time: '2018-03-02T10:33:00.000Z'
+  },
+  {
+    id: 6,
+    sourceAccount: 'A',
+    targetAccount: 'C',
+    amount: 250,
+    category: 'other',
+    time: '2018-03-02T10:33:05.000Z'
+  },
+  {
+    id: 4,
+    sourceAccount: 'A',
+    targetAccount: 'B',
+    amount: 100,
+    category: 'eating_out',
+    time: '2018-03-02T10:36:00.000Z'
+  },
+  {
+    id: 2,
+    sourceAccount: 'A',
+    targetAccount: 'B',
+    amount: 100,
+    category: 'eating_out',
+    time: '2018-03-02T10:33:50.000Z'
+  },
+  {
+    id: 5,
+    sourceAccount: 'A',
+    targetAccount: 'C',
+    amount: 250,
+    category: 'other',
+    time: '2018-03-02T10:33:00.000Z'
+  }
+];
+```
+
+Expected output:
+
+```json
+[
+  [
+    {
+      id: 1, 1-2
+      sourceAccount: "A",
+      targetAccount: "B",
+      amount: 100,
+      category: "eating_out",
+      time: "2018-03-02T10:33:00.000Z"
+    },
+    {
+      id: 2,
+      sourceAccount: "A",
+      targetAccount: "B",
+      amount: 100,
+      category: "eating_out",
+      time: "2018-03-02T10:33:50.000Z"
+    },
+    {
+      id: 3, 1-1
+      sourceAccount: "A",
+      targetAccount: "B",
+      amount: 100,
+      category: "eating_out",
+      time: "2018-03-02T10:34:30.000Z"
+    }
+  ],
+  [
+    {
+      id: 5,
+      sourceAccount: "A",
+      targetAccount: "C",
+      amount: 250,
+      category: "other",
+      time: "2018-03-02T10:33:00.000Z"
+    },
+    {
+      id: 6, 2-1
+      sourceAccount: "A",
+      targetAccount: "C",
+      amount: 250,
+      category: "other",
+      time: "2018-03-02T10:33:05.000Z"
+    }
+  ]
+];
+```

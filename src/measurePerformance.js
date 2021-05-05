@@ -1,14 +1,17 @@
 const { performance, PerformanceObserver } = require("perf_hooks");
 
 const {
-  getBalanceByCategoryInPeriod,
+  getBalanceByCategoryInPeriod: firstChallenge,
 } = require("./getBalanceByCategoryInPeriod");
+const {
+  findDuplicateTransactions: secondChallenge,
+} = require("./findDuplicateTransactions");
 
 const iterations = 10000;
 const category = "category";
 const time = "2020-03-12T00:00:00Z";
 const fewTransactions = Array.from({ length: 10 }, (_, i) => ({
-  amount: 10,
+  items: 10,
   category,
   id: i,
   sourceAccount: "sourceAccount",
@@ -16,7 +19,7 @@ const fewTransactions = Array.from({ length: 10 }, (_, i) => ({
   time,
 }));
 const manyTransactions = Array.from({ length: 1000 }, (_, i) => ({
-  amount: 1000,
+  items: 1000,
   category,
   id: i,
   sourceAccount: "sourceAccount",
@@ -24,26 +27,38 @@ const manyTransactions = Array.from({ length: 1000 }, (_, i) => ({
   time,
 }));
 
-const getBalanceByCategoryInPeriodWithIterrations = (transactions) => {
+const obs = new PerformanceObserver((list) => {
+  const entry = list.getEntries()[0];
+  const duration = entry.duration;
+  const name = entry.name;
+  const items = entry[0][0].items;
+  console.log(`${name} ${iterations} with ${items} transactions`, duration);
+});
+
+obs.observe({ entryTypes: ["function"] });
+
+const getBalanceByCategoryInPeriod = (transactions) => {
   for (var i = 0; i < iterations; i++) {
-    getBalanceByCategoryInPeriod(transactions, category, time, time);
+    firstChallenge(transactions, category, time, time);
   }
 };
 const wrappedFirstChallenge = performance.timerify(
-  getBalanceByCategoryInPeriodWithIterrations
+  getBalanceByCategoryInPeriod
 );
 
-const obsFirstChallenge = new PerformanceObserver((list) => {
-  const entry = list.getEntries()[0];
-  const duration = entry.duration;
-  const items = entry[0][0].amount;
-  console.log(`${iterations} with ${items} transactions`, duration);
-});
+const findDuplicateTransactions = (transactions) => {
+  for (var i = 0; i < iterations; i++) {
+    secondChallenge(transactions);
+  }
+};
+const wrappedSecondChallenge = performance.timerify(
+  findDuplicateTransactions
+);
 
-obsFirstChallenge.observe({ entryTypes: ["function"] });
-
-// A performance timeline entry will be created
 wrappedFirstChallenge(fewTransactions);
 wrappedFirstChallenge(manyTransactions);
 
-obsFirstChallenge.disconnect();
+wrappedSecondChallenge(fewTransactions);
+wrappedSecondChallenge(manyTransactions);
+
+obs.disconnect();
