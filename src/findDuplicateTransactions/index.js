@@ -48,20 +48,29 @@ function findDuplicateTransactions(transactions = []) {
     .map((group) => {
       const minute = 1000 * 60;
       const duplicatedTransactions = [];
+      const lengthWithoutLast = group.length - 2;
+      let isValidFlag = false;
 
-      for (let i = 0; i < group.length - 1; i++) {
+      for (let i = 0; i <= lengthWithoutLast; i += 1) {
         const current = group[i];
         const next = group[i + 1];
+        const isLastButOne = i === group.length - 2;
 
         const currentTime = getTimeStamp(current.time);
         const nextTime = getTimeStamp(next.time);
 
         if (currentTime > nextTime - minute) {
           duplicatedTransactions.push(current);
+          isValidFlag = true;
 
-          if (i === group.length - 2) {
+          if (i === lengthWithoutLast) {
             duplicatedTransactions.push(next);
           }
+        } else {
+            if (isValidFlag) {
+                duplicatedTransactions.push(current);
+                isValidFlag = false;
+            }
         }
       }
 
